@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -15,4 +17,7 @@ public class LevelCategoryEntity {
     private Long id;
 
     private String level;
+
+    @OneToMany(mappedBy = "levelCategory")
+    private List<UserLevelEntity> userLevels;
 }
