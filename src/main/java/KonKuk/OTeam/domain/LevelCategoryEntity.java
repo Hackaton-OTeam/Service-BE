@@ -16,8 +16,12 @@ public class LevelCategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String level;
+    private String level; // ex) 어린이, 초등학생, 중학생 ...
 
     @OneToMany(mappedBy = "levelCategory")
-    private List<UserLevelEntity> userLevels;
+    private List<UserInfoEntity> users; // UserInfoEntity와의 일대다 관계
+
+    @OneToMany(mappedBy = "levelCategory")
+    private List<QuizEntity> quizes; // QuizEntity와의 일대다 관계
+
 }

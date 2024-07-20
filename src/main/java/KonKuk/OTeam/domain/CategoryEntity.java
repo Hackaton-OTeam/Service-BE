@@ -15,8 +15,14 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String category;
+    private String category; // 상식과 퀴즈 카테고리 ex) 단어, 역사, 사회 ...
 
     @OneToMany(mappedBy = "category")
     private List<UserCategoryEntity> userCategories;
+
+    @OneToMany(mappedBy = "id")
+    private List<KnowledgeEntity> knowledgeList;
+
+    @OneToMany(mappedBy = "id")
+    private List<QuizEntity> quizEntityList;
 }
