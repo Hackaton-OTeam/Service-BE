@@ -16,9 +16,8 @@ public class KnowledgeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Date date; // 상식 제공할 날짜
-
+    private String title; // 상식 제목
     private String content; // 상식 내용
 
     @ManyToOne
