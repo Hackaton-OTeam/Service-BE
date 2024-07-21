@@ -5,10 +5,12 @@ import KonKuk.OTeam.service.KnowledgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,5 +29,13 @@ public class KnowledgeController {
         String todayStr = dateFormat.format(new Date());
         Date today = java.sql.Date.valueOf(todayStr); // String을 Date로 변환
         return knowledgeService.getTodayKnowledgeForAllCategories(today);
+    }
+
+    /**
+     * 사용자가 선택한 카테고리 맞춤 상식 제공
+     * */
+    @GetMapping("/todayForUser")
+    public Map<String, List<KnowledgeDTO>> getTodayKnowledgeForUser(@RequestParam String userEmail) {
+        return knowledgeService.getTodayKnowledgeForUser(userEmail);
     }
 }
