@@ -1,5 +1,6 @@
 package KonKuk.OTeam.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class CategoryEntity {
     private String category; // 상식과 퀴즈 카테고리 ex) 단어, 역사, 사회 ...
 
     @OneToMany(mappedBy = "category")
+    @JsonManagedReference
     private List<UserCategoryEntity> userCategories;
 
     @OneToMany(mappedBy = "id")
