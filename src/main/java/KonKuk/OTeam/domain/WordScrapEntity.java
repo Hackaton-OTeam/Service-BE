@@ -7,18 +7,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name ="KnowledgeScrap")
-public class KnowledgeScrapEntity {
+@Table(name ="WordScrap")
+public class WordScrapEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "email")
+    @JoinColumn(name = "user_email")
     private UserInfoEntity userInfo; // 유저 이메일
 
     @ManyToOne
-    @JoinColumn(name = "knowledgeId")
-    private KnowledgeEntity knowledge; // 상식 ID
+    @JoinColumn(name = "word_id")
+    private WordEntity word; // 단어 ID
 }

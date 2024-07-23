@@ -34,8 +34,8 @@ public class KnowledgeController {
     /**
      * 사용자가 선택한 카테고리 맞춤 상식 제공
      * */
-    @GetMapping("/todayForUser")
-    public Map<String, List<KnowledgeDTO>> getTodayKnowledgeForUser(@RequestParam String userEmail) {
-        return knowledgeService.getTodayKnowledgeForUser(userEmail);
-    }
+//    @GetMapping("/todayForUser")
+//    public Map<String, List<KnowledgeDTO>> getTodayKnowledgeForUser(@RequestParam String userEmail) {
+//        return knowledgeService.getTodayKnowledgeForUser(userEmail);
+//    }
 }

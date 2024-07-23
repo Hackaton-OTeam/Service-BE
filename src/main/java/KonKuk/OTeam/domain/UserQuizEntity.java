@@ -1,15 +1,16 @@
 package KonKuk.OTeam.domain;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
-@Table(name ="QuizScrap")
-public class QuizScrapEntity {
+@Table(name ="UserQuiz")
+public class UserQuizEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,6 @@ public class QuizScrapEntity {
     private UserInfoEntity userInfo; // 유저 이메일
 
     @ManyToOne
-    @JoinColumn(name = "quizId")
-    private QuizEntity quiz; // 상식 ID
+    @JoinColumn(name = "quizChapterId")
+    private QuizChapterEntity quizChapter;
 }

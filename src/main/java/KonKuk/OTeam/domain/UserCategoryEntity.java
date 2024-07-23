@@ -18,7 +18,7 @@ public class UserCategoryEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "userEmail")
+    @JoinColumn(name = "email")
     private UserInfoEntity userInfo; // 유저 이메일
 
     @ManyToOne

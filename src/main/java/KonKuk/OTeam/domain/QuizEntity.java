@@ -1,5 +1,6 @@
 package KonKuk.OTeam.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,19 +17,27 @@ public class QuizEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date date; // 퀴즈 제공할 날짜
-
     private String question;
 
-    private String answer;
-    private String wrongAnswer1;
-    private String wrongAnswer2;
-    private String wrongAnswer3;
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
+    private CategoryEntity category; // 퀴즈 카테고리
 
     @ManyToOne
-    @JoinColumn(name = "level_id")
-    private LevelCategoryEntity levelCategory; // 해당 퀴즈의 레벨(난이도)
+    @JoinColumn(name = "answerWordId")
+    private WordEntity answerWord;
 
-    @OneToMany(mappedBy = "quiz")
-    private List<QuizScrapEntity> quizScraps; // QuizScrapEntity와의 일대다 관계
+    @ManyToOne
+    @JoinColumn(name = "wrongWord1Id")
+    private WordEntity wrongWord1;
+
+    @ManyToOne
+    @JoinColumn(name = "wrongWord2Id")
+    private WordEntity wrongWord2;
+
+    @ManyToOne
+    @JoinColumn(name = "wrongWord3Id")
+    private WordEntity wrongWord3;
+
+
 }

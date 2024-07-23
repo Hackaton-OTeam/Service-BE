@@ -16,11 +16,11 @@ import java.util.List;
 public class UserInfoEntity {
 
     @Id
-    private String userEmail;
-    private String userPassword;
-    private String userName;
+    private String email;
+    private String password;
+    private String name;
 
-    private Long oNumber; //유저가 하루에 맞춘 문제 수
+    private Long wordCount; // 사용자가 학습한 총 단어 수
 
     @ManyToOne
     @JoinColumn(name = "level_id")
@@ -30,9 +30,8 @@ public class UserInfoEntity {
     private List<UserCategoryEntity> userCategories; // UserCategoryEntity와의 일대다 관계
 
     @OneToMany(mappedBy = "userInfo")
-    private List<QuizScrapEntity> quizScraps; // QuizScrapEntity와의 일대다 관계
-
-    @OneToMany(mappedBy = "userInfo")
     private List<KnowledgeScrapEntity> knowledgeScraps; // QuizScrapEntity와의 일대다 관계
 
+    @OneToMany(mappedBy = "userInfo")
+    private List<WordScrapEntity> wordScraps;
 }

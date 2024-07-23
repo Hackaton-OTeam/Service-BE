@@ -21,7 +21,5 @@ public class LevelCategoryEntity {
     @OneToMany(mappedBy = "levelCategory")
     private List<UserInfoEntity> users; // UserInfoEntity와의 일대다 관계
 
-    @OneToMany(mappedBy = "levelCategory")
-    private List<QuizEntity> quizes; // QuizEntity와의 일대다 관계
 
 }
