@@ -11,6 +11,9 @@ import java.util.List;
 @Entity
 @Table(name ="UserQuiz")
 public class UserQuizEntity {
+    /**
+     * 사용자가 챕터를 이수했다면 이 테이블에 저장됨
+     * */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

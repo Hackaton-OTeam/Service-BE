@@ -39,5 +39,9 @@ public class QuizEntity {
     @JoinColumn(name = "wrongWord3Id")
     private WordEntity wrongWord3;
 
+    @ManyToOne
+    @JoinColumn(name = "chapter_id")
+    private QuizChapterEntity chapter;
+
 
 }
