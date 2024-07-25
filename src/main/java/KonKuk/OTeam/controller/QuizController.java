@@ -6,10 +6,8 @@ import KonKuk.OTeam.domain.QuizDTO;
 import KonKuk.OTeam.domain.QuizEntity;
 import KonKuk.OTeam.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -20,8 +18,6 @@ public class QuizController {
 
     @Autowired
     private QuizService quizService;
-    @Autowired
-    private QuizService quizChapterService;
 
     /**
      * 특정 카테고리에 대한 사용자의 퀴즈 학습 여부 제공
@@ -31,7 +27,7 @@ public class QuizController {
             @RequestParam Long categoryId,
             @RequestParam String userEmail
     ) {
-        return quizChapterService.getQuizChapterStatuses(categoryId, userEmail);
+        return quizService.getQuizChapterStatuses(categoryId, userEmail);
     }
 
     /**
@@ -45,12 +41,22 @@ public class QuizController {
     }
 
     /**
-     * 사용자가 선택한 카테고리 맞춤 퀴즈 제공
+     * (특정 카테고리) 특정 챕터의 퀴즈 학습 인정 & 학습 단어 수 누적
      * */
-    /*
-    @GetMapping("/quizForUser")
-    public Map<String, List<QuizDTO>> getTodayQuizForUser(@RequestParam String userEmail) {
-        return quizService.getTodayQuizForUser(userEmail);
+    @PostMapping("/complete-chapter")
+    public ResponseEntity<String> completeChapter(@RequestParam String userEmail,
+                                                  @RequestParam Long chapterId) {
+        quizService.completeQuizChapter(userEmail, chapterId);
+        return ResponseEntity.ok("퀴즈 이수 완료");
     }
-    */
+
+    /**
+     * 사용자가 선택한 카테고리 맞춤 퀴즈 제공
+     *
+     * @GetMapping("/quizForUser")
+     *     public Map<String, List<QuizDTO>> getTodayQuizForUser(@RequestParam String userEmail) {
+     *         return quizService.getTodayQuizForUser(userEmail);
+     *     }
+     */
+
 }

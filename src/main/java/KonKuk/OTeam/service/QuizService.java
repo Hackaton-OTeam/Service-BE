@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,6 +80,25 @@ public class QuizService {
                         quiz.getWrongWord3() != null ? quiz.getWrongWord3().getWord() : "N/A"
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void completeQuizChapter(String userEmail, Long quizChapterId) {
+        // 사용자와 퀴즈 챕터 정보 가져오기
+        UserInfoEntity user = userInfoRepository.findById(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user email: " + userEmail));
+        QuizChapterEntity quizChapter = quizChapterRepository.findById(quizChapterId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid quizChapterId: " + quizChapterId));
+
+        // UserQuizEntity에 저장
+        UserQuizEntity userQuiz = new UserQuizEntity();
+        userQuiz.setUserInfo(user);
+        userQuiz.setQuizChapter(quizChapter);
+        userQuizRepository.save(userQuiz);
+
+        // 사용자의 wordCount 업데이트
+        user.setWordCount(user.getWordCount() + quizChapter.getQuizAmount());
+        userInfoRepository.save(user);
     }
 
 //    public Map<String, List<QuizDTO>> getTodayQuizForUser(String userEmail) {
