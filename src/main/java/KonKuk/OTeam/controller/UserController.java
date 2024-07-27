@@ -28,6 +28,8 @@ public class UserController {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         userInfoDTO.setEmail(userEmail);
         userInfoDTO.setPassword(userPassword);
+        userInfoDTO.setLevel(1L);
+        userInfoDTO.setWordCount(0L);
         String saveResult = userService.save(userInfoDTO);
         return ResponseEntity.ok(saveResult);
     }
@@ -65,8 +67,6 @@ public class UserController {
         userInfoDTO.setEmail(loginEmail);
         userInfoDTO.setName(userName);
         userInfoDTO.setCategories(categories);
-        userInfoDTO.setLevel(1L);
-        userInfoDTO.setWordCount(0L);
         String result = userService.initialSetting(userInfoDTO);
 
         return ResponseEntity.ok(result);

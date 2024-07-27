@@ -23,6 +23,15 @@ public class UserService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    private final UserInfoMapper userInfoMapper;
+
+    @Autowired
+    public UserService(LevelCategoryRepository levelCategoryRepository, CategoryRepository categoryRepository) {
+        this.levelCategoryRepository = levelCategoryRepository;
+        this.categoryRepository = categoryRepository;
+        this.userInfoMapper = new UserInfoMapper(levelCategoryRepository, categoryRepository);
+    }
+
     public String emailCheck(String userEmail) {
         Optional<UserInfoEntity> byEmail = userInfoRepository.findByEmail(userEmail);
         if (byEmail.isPresent()) {
@@ -33,12 +42,7 @@ public class UserService {
     }
 
     public String save(UserInfoDTO userInfoDTO) {
-        LevelCategoryEntity levelCategoryEntity = levelCategoryRepository.findById(userInfoDTO.getLevel())
-                .orElseThrow(() -> new RuntimeException("Level not found"));
-        List<CategoryEntity> categoryEntities = categoryRepository.findByCategoryIn(userInfoDTO.getCategories());
-
-        UserInfoEntity userInfoEntity = UserInfoMapper.toEntity(userInfoDTO, levelCategoryEntity, categoryEntities);
-
+        UserInfoEntity userInfoEntity = userInfoMapper.toEntity(userInfoDTO);
         userInfoEntity = userInfoRepository.save(userInfoEntity);
         if (userInfoEntity != null) {
             return "success";
@@ -69,14 +73,8 @@ public class UserService {
 
         UserInfoEntity userInfoEntity = userOpt.get();
 
-        // 사용자 닉네임과 맞힌 단어 수 설정
+        // 사용자 닉네임 설정
         userInfoEntity.setName(userInfoDTO.getName());
-        userInfoEntity.setWordCount(userInfoDTO.getWordCount());
-
-        // 레벨 카테고리 설정
-        LevelCategoryEntity levelCategoryEntity = levelCategoryRepository.findById(userInfoDTO.getLevel())
-                .orElseThrow(() -> new RuntimeException("Level not found"));
-        userInfoEntity.setLevelCategory(levelCategoryEntity);
 
         // 사용자 취약 카테고리 설정
         List<CategoryEntity> categoryEntities = categoryRepository.findByCategoryIn(userInfoDTO.getCategories());
