@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public String save(UserInfoDTO userInfoDTO) {
-        LevelCategoryEntity levelCategoryEntity = levelCategoryRepository.findByLevel(userInfoDTO.getLevel())
+        LevelCategoryEntity levelCategoryEntity = levelCategoryRepository.findById(userInfoDTO.getLevel())
                 .orElseThrow(() -> new RuntimeException("Level not found"));
         List<CategoryEntity> categoryEntities = categoryRepository.findByCategoryIn(userInfoDTO.getCategories());
 
@@ -69,8 +69,14 @@ public class UserService {
 
         UserInfoEntity userInfoEntity = userOpt.get();
 
-        // 사용자 이름 설정
+        // 사용자 닉네임과 맞힌 단어 수 설정
         userInfoEntity.setName(userInfoDTO.getName());
+        userInfoEntity.setWordCount(userInfoDTO.getWordCount());
+
+        // 레벨 카테고리 설정
+        LevelCategoryEntity levelCategoryEntity = levelCategoryRepository.findById(userInfoDTO.getLevel())
+                .orElseThrow(() -> new RuntimeException("Level not found"));
+        userInfoEntity.setLevelCategory(levelCategoryEntity);
 
         // 사용자 취약 카테고리 설정
         List<CategoryEntity> categoryEntities = categoryRepository.findByCategoryIn(userInfoDTO.getCategories());

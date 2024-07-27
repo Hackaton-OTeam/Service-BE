@@ -14,7 +14,7 @@ public class UserInfoMapper {
         dto.setWordCount(entity.getWordCount());
 
         if (entity.getLevelCategory() != null) {
-            dto.setLevel(entity.getLevelCategory().getLevel());
+            dto.setLevel(entity.getLevelCategory().getId());
         }
 
         if (entity.getUserCategories() != null) {

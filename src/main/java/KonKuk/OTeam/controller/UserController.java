@@ -65,7 +65,8 @@ public class UserController {
         userInfoDTO.setEmail(loginEmail);
         userInfoDTO.setName(userName);
         userInfoDTO.setCategories(categories);
-
+        userInfoDTO.setLevel(1L);
+        userInfoDTO.setWordCount(0L);
         String result = userService.initialSetting(userInfoDTO);
 
         return ResponseEntity.ok(result);

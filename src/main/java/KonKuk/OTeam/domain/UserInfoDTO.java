@@ -17,6 +17,6 @@ public class UserInfoDTO {
     private String password;
     private String name;
     private Long wordCount; // 사용자가 학습한 총 단어 수
-    private String level;
+    private Long level;
     private List<String> categories; // 사용자 취약 카테고리
 }
