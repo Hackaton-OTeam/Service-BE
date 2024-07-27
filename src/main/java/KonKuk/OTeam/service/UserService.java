@@ -3,6 +3,7 @@ package KonKuk.OTeam.service;
 import KonKuk.OTeam.domain.*;
 import KonKuk.OTeam.repository.CategoryRepository;
 import KonKuk.OTeam.repository.LevelCategoryRepository;
+import KonKuk.OTeam.repository.UserCategoryRepository;
 import KonKuk.OTeam.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class UserService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private UserCategoryRepository userCategoryRepository;
+
 
     private final UserInfoMapper userInfoMapper;
 
@@ -76,6 +81,9 @@ public class UserService {
         // 사용자 닉네임 설정
         userInfoEntity.setName(userInfoDTO.getName());
 
+        // 기존 사용자 카테고리 삭제
+        userCategoryRepository.deleteAllByUserInfo(userInfoEntity);
+
         // 사용자 취약 카테고리 설정
         List<CategoryEntity> categoryEntities = categoryRepository.findByCategoryIn(userInfoDTO.getCategories());
         List<UserCategoryEntity> userCategories = categoryEntities.stream()
@@ -87,7 +95,8 @@ public class UserService {
                 })
                 .collect(Collectors.toList());
 
-        userInfoEntity.setUserCategories(userCategories);
+        // userCategoryRepository를 통해 UserCategoryEntity 저장
+        userCategoryRepository.saveAll(userCategories);
 
         // 변경된 사용자 정보를 저장
         userInfoRepository.save(userInfoEntity);
