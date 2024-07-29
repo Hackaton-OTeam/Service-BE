@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -18,24 +20,32 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/email-check")
-    public ResponseEntity<String> emailCheck(@RequestParam("userEmail") String userEmail) {
+    public ResponseEntity<String> emailCheck(@RequestBody Map<String, String> request) {
+        String userEmail = request.get("userEmail");
         String checkResult = userService.emailCheck(userEmail);
         return ResponseEntity.ok(checkResult);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestParam("userEmail") String userEmail, @RequestParam("userPassword") String userPassword) {
+    public ResponseEntity<String> save(@RequestBody Map<String, String> request) {
+        String userEmail = request.get("userEmail");
+        String userPassword = request.get("userPassword");
+
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         userInfoDTO.setEmail(userEmail);
         userInfoDTO.setPassword(userPassword);
         userInfoDTO.setLevel(1L);
         userInfoDTO.setWordCount(0L);
+
         String saveResult = userService.save(userInfoDTO);
         return ResponseEntity.ok(saveResult);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam("userEmail") String userEmail, @RequestParam("userPassword") String userPassword, HttpSession session) {
+    public ResponseEntity<String> login(@RequestBody Map<String, String> request, HttpSession session) {
+        String userEmail = request.get("userEmail");
+        String userPassword = request.get("userPassword");
+
         String loginResultEmail = userService.login(userEmail, userPassword);
         if (loginResultEmail != null) {
             session.setAttribute("loginEmail", loginResultEmail);
@@ -56,19 +66,22 @@ public class UserController {
     }
 
     @PostMapping("/initial-setting")
-    public ResponseEntity<String> initialSetting(@RequestParam("userName") String userName, @RequestParam("categories") List<String> categories, HttpSession session) {
+    public ResponseEntity<String> initialSetting(@RequestBody Map<String, Object> request, HttpSession session) {
         String loginEmail = (String) session.getAttribute("loginEmail");
 
         if (loginEmail == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("fail");
         }
 
+        String userName = (String) request.get("userName");
+        List<String> categories = (List<String>) request.get("categories");
+
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         userInfoDTO.setEmail(loginEmail);
         userInfoDTO.setName(userName);
         userInfoDTO.setCategories(categories);
-        String result = userService.initialSetting(userInfoDTO);
 
+        String result = userService.initialSetting(userInfoDTO);
         return ResponseEntity.ok(result);
     }
 }
