@@ -101,6 +101,6 @@ public class UserService {
         // 변경된 사용자 정보를 저장
         userInfoRepository.save(userInfoEntity);
 
-        return "success";
+        return userInfoDTO.getEmail();
     }
 }

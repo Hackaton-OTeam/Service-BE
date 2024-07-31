@@ -38,7 +38,11 @@ public class UserController {
         userInfoDTO.setWordCount(0L);
 
         String saveResult = userService.save(userInfoDTO);
-        return ResponseEntity.ok(saveResult);
+        if (saveResult.equals("success")) {
+            return ResponseEntity.ok(userEmail);
+        } else {
+            return ResponseEntity.ok("fail");
+        }
     }
 
     @PostMapping("/login")
@@ -66,22 +70,22 @@ public class UserController {
     }
 
     @PostMapping("/initial-setting")
-    public ResponseEntity<String> initialSetting(@RequestBody Map<String, Object> request, HttpSession session) {
-        String loginEmail = (String) session.getAttribute("loginEmail");
-
-        if (loginEmail == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("fail");
-        }
-
+    public ResponseEntity<String> initialSetting(@RequestBody Map<String, Object> request) {
+        String userEmail = (String) request.get("userEmail");
         String userName = (String) request.get("userName");
         List<String> categories = (List<String>) request.get("categories");
 
         UserInfoDTO userInfoDTO = new UserInfoDTO();
-        userInfoDTO.setEmail(loginEmail);
+        userInfoDTO.setEmail(userEmail);
         userInfoDTO.setName(userName);
         userInfoDTO.setCategories(categories);
 
         String result = userService.initialSetting(userInfoDTO);
-        return ResponseEntity.ok(result);
+
+        if ("fail".equals(result)) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+        } else {
+            return ResponseEntity.ok(result);
+        }
     }
 }
