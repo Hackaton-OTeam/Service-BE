@@ -103,4 +103,8 @@ public class UserService {
 
         return userInfoDTO.getEmail();
     }
+
+    public Optional<UserInfoEntity> findByEmail(String userEmail) {
+        return userInfoRepository.findByEmail(userEmail);
+    }
 }

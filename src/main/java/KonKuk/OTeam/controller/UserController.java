@@ -1,6 +1,7 @@
 package KonKuk.OTeam.controller;
 
 import KonKuk.OTeam.domain.UserInfoDTO;
+import KonKuk.OTeam.domain.UserInfoEntity;
 import KonKuk.OTeam.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
@@ -88,4 +87,29 @@ public class UserController {
             return ResponseEntity.ok(result);
         }
     }
+
+    @PostMapping("/mypage")
+    public ResponseEntity<Map<String, String>> getUserInfo(@RequestBody Map<String, String> request) {
+        String userEmail = request.get("userEmail");
+
+        // UserEmail을 통해 UserInfo를 찾기
+        Optional<UserInfoEntity> userOpt = userService.findByEmail(userEmail);
+        if (!userOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        UserInfoEntity userInfo = userOpt.get();
+
+        // UserInfo에서 필요한 데이터 추출
+        String userName = userInfo.getName();
+        String level = userInfo.getLevelCategory().getLevel();
+
+        // 결과를 맵에 담아서 반환
+        Map<String, String> response = new HashMap<>();
+        response.put("userName", userName);
+        response.put("level", level);
+
+        return ResponseEntity.ok(response);
+    }
+
 }
