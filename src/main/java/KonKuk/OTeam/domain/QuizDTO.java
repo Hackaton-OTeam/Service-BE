@@ -10,9 +10,11 @@ import lombok.Setter;
 public class QuizDTO {
 
     private Long id;
-    private String question;
+    private String question1;
+    private String question2;
     private String answer;
     private String wrongAnswer1;
     private String wrongAnswer2;
     private String wrongAnswer3;
+
 }

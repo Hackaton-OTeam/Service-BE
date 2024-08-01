@@ -15,4 +15,6 @@ public interface QuizRepository extends JpaRepository<QuizEntity, Long> {
             Long startQuizId,
             Pageable pageable
     );
+
+    List<QuizEntity> findByChapter_Id(Long chapterId);
 }

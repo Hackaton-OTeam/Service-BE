@@ -17,6 +17,8 @@ public class CategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String category; // 상식과 퀴즈 카테고리 ex) 단어, 역사, 사회 ...
+    private String categoryExplain;
+    private String filePath;
 
     @OneToMany(mappedBy = "category")
     @JsonManagedReference

@@ -1,9 +1,7 @@
 package KonKuk.OTeam.controller;
 
-import KonKuk.OTeam.domain.KnowledgeDTO;
-import KonKuk.OTeam.domain.QuizChapterStatusDTO;
-import KonKuk.OTeam.domain.QuizDTO;
-import KonKuk.OTeam.domain.QuizEntity;
+import KonKuk.OTeam.domain.*;
+import KonKuk.OTeam.repository.QuizRepository;
 import KonKuk.OTeam.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +16,8 @@ public class QuizController {
 
     @Autowired
     private QuizService quizService;
+    @Autowired
+    private QuizRepository quizRepository;
 
     /**
      * 특정 카테고리에 대한 사용자의 퀴즈 학습 여부 제공
@@ -30,6 +30,14 @@ public class QuizController {
         return quizService.getQuizChapterStatuses(categoryId, userEmail);
     }
 
+    @GetMapping("/words-count")
+    public Map<String, Integer> getWordsSummary(
+            @RequestParam Long categoryId,
+            @RequestParam String userEmail) {
+        Map<String, Integer> summary = quizService.getWordsSummaryByCategory(categoryId, userEmail);
+        return summary;
+    }
+
     /**
      * (특정 카테고리) 특정 챕터의 퀴즈 제공
      * */
@@ -38,6 +46,62 @@ public class QuizController {
             @RequestParam Long chapterId
     ) {
         return quizService.getQuizzesByChapter(chapterId);
+    }
+
+    @GetMapping("/details")
+    public QuizResponseDTO getQuizDetails(@RequestParam Long quizId) {
+        // 퀴즈 정보를 데이터베이스에서 조회
+        QuizEntity quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid quiz ID: " + quizId));
+
+        // 퀴즈 정보와 단어 정보를 DTO로 변환
+        QuizResponseDTO response = new QuizResponseDTO();
+        //response.setId(quiz.getId());
+        //response.setQuestion(quiz.getQuestion());
+
+        response.setAnswerWord(toWordDTO(quiz.getAnswerWord()));
+        response.setWrongWord1(toWrongWordDTO(quiz.getWrongWord1()));
+        response.setWrongWord2(toWrongWordDTO(quiz.getWrongWord2()));
+        response.setWrongWord3(toWrongWordDTO(quiz.getWrongWord3()));
+
+        return response;
+    }
+
+    // WordEntity를 WordDTO로 변환하는 헬퍼 메서드
+    private QuizResponseDTO.WordDTO toWordDTO(WordEntity word) {
+        if (word == null) {
+            return null;
+        }
+
+        return new QuizResponseDTO.WordDTO(
+                word.getId(),
+                word.getWord(),
+                word.getWordClass(),
+                word.getDescription(),
+                word.getExample(),
+                word.getExplanation()
+        );
+    }
+
+    private QuizResponseDTO.WrongWordDTO toWrongWordDTO(WordEntity word) {
+        if (word == null) {
+            return null;
+        }
+
+        return new QuizResponseDTO.WrongWordDTO(
+                word.getId(),
+                word.getWord(),
+                word.getWordClass(),
+                word.getDescription(),
+                word.getExample()
+        );
+    }
+
+    @GetMapping("/words")
+    public List<WordDTO> getWordsByChapter(@RequestParam String userEmail,
+                                           @RequestParam Long chapterId) {
+        //List<WordEntity> words = quizService.getWordsByChapter(chapterId);
+        return quizService.getWordsByChapter(chapterId, userEmail);
     }
 
     /**

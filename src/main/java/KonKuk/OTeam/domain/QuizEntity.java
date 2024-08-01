@@ -17,7 +17,8 @@ public class QuizEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String question;
+    private String question1;
+    private String question2;
 
     @ManyToOne
     @JoinColumn(name = "categoryId")

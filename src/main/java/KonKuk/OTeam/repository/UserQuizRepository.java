@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface UserQuizRepository extends JpaRepository<UserQuizEntity, Long> {
     List<UserQuizEntity> findByUserInfo(UserInfoEntity userInfo);
+
+    List<UserQuizEntity> findByUserInfoAndQuizChapter_Category_Id(UserInfoEntity userInfo, Long categoryId);
 }
