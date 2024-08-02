@@ -39,8 +39,8 @@ public class CategoryService {
                     return new CategoryDTO(
                             category.getId(),
                             category.getCategory(),
-                            category.getCategoryExplain(),
-                            fileData
+                            category.getCategoryExplain()
+                            //, fileData
                     );
                 })
                 .collect(Collectors.toList());
