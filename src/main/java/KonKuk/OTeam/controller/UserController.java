@@ -112,4 +112,29 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/levelpage")
+    public ResponseEntity<Map<String, Object>> getUserInfo(HttpSession session) {
+        String loginEmail = (String) session.getAttribute("loginEmail");
+
+        if (loginEmail == null) {
+            // 세션에 로그인 정보가 없으면 UNAUTHORIZED 상태를 반환
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        Optional<UserInfoEntity> userOpt = userService.findByEmail(loginEmail);
+        if (!userOpt.isPresent()) {
+            // 만약 사용자가 없다면 NOT_FOUND 상태를 반환
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        UserInfoEntity userInfo = userOpt.get();
+
+        // level과 wordCount를 맵에 담아서 반환
+        Map<String, Object> response = new HashMap<>();
+        response.put("level", userInfo.getLevelCategory().getLevel());
+        response.put("wordCount", userInfo.getWordCount());
+
+        return ResponseEntity.ok(response);
+    }
+
 }
