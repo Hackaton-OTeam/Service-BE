@@ -112,16 +112,16 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/levelpage")
-    public ResponseEntity<Map<String, Object>> getUserInfo(HttpSession session) {
-        String loginEmail = (String) session.getAttribute("loginEmail");
+    @PostMapping("/levelpage")
+    public ResponseEntity<Map<String, Object>> getUserLevel(@RequestBody Map<String, String> request) {
+        String userEmail = request.get("userEmail");
 
-        if (loginEmail == null) {
-            // 세션에 로그인 정보가 없으면 UNAUTHORIZED 상태를 반환
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        if (userEmail == null || userEmail.isEmpty()) {
+            // 이메일이 없으면 BAD_REQUEST 상태를 반환
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        Optional<UserInfoEntity> userOpt = userService.findByEmail(loginEmail);
+        Optional<UserInfoEntity> userOpt = userService.findByEmail(userEmail);
         if (!userOpt.isPresent()) {
             // 만약 사용자가 없다면 NOT_FOUND 상태를 반환
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
