@@ -28,6 +28,8 @@ public class QuizService {
     private QuizRepository quizRepository;
     @Autowired
     private WordScrapRepository wordScrapRepository;
+    @Autowired
+    private LevelCategoryRepository levelCategoryRepository;
 
 
     public List<QuizChapterStatusDTO> getQuizChapterStatuses(Long categoryId, String userEmail) {
@@ -214,6 +216,14 @@ public class QuizService {
         QuizChapterEntity quizChapter = quizChapterRepository.findById(quizChapterId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid quizChapterId: " + quizChapterId));
 
+        // 이미 동일한 정보가 존재하는지 확인
+        Optional<UserQuizEntity> existingUserQuiz = userQuizRepository.findByUserInfoAndQuizChapter(userEmail, quizChapterId);
+
+        if (existingUserQuiz.isPresent()) {
+            // 동일한 정보가 존재하면 업데이트를 진행하지 않음
+            return;
+        }
+
         // UserQuizEntity에 저장
         UserQuizEntity userQuiz = new UserQuizEntity();
         userQuiz.setUserInfo(user);
@@ -221,8 +231,40 @@ public class QuizService {
         userQuizRepository.save(userQuiz);
 
         // 사용자의 wordCount 업데이트
-        user.setWordCount(user.getWordCount() + quizChapter.getQuizAmount());
+        user.setWordCount(user.getWordCount() + quizChapter.getQuizAmount() * 4);
         userInfoRepository.save(user);
+
+        // 사용자의 Level 업데이트
+        updateUserLevel(user);
+
+        userInfoRepository.save(user);
+    }
+
+    private void updateUserLevel(UserInfoEntity user) {
+        Long wordCount = user.getWordCount();
+
+        // 레벨 기준에 따라 레벨 결정
+        LevelCategoryEntity newLevel = determineLevelByWordCount(wordCount);
+
+        // 현재 레벨과 다른 경우에만 업데이트
+        if (newLevel != null && !newLevel.equals(user.getLevelCategory())) {
+            user.setLevelCategory(newLevel);
+        }
+    }
+
+    private LevelCategoryEntity determineLevelByWordCount(Long wordCount) {
+        // 레벨 기준 정의
+        if (wordCount < 43) {
+            return levelCategoryRepository.findByLevel("유생"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
+        } else if (wordCount < 85) {
+            return levelCategoryRepository.findByLevel("문사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
+        } else if (wordCount < 127) {
+            return levelCategoryRepository.findByLevel("학사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
+        } else if (wordCount < 1691) {
+            return levelCategoryRepository.findByLevel("박사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
+        } else {
+            return levelCategoryRepository.findByLevel("세종대왕"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
+        }
     }
 
 //    public Map<String, List<QuizDTO>> getTodayQuizForUser(String userEmail) {
