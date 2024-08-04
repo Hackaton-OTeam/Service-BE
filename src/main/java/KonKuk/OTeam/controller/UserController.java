@@ -129,10 +129,36 @@ public class UserController {
 
         UserInfoEntity userInfo = userOpt.get();
 
+        // 레벨에 따른 wordMaxCount 설정
+        Long levelId = userInfo.getLevelCategory().getId();
+        int wordMaxCount = 0;
+
+        switch (levelId.intValue()) {
+            case 1:
+                wordMaxCount = 42;
+                break;
+            case 2:
+                wordMaxCount = 84;
+                break;
+            case 3:
+                wordMaxCount = 126;
+                break;
+            case 4:
+                wordMaxCount = 168;
+                break;
+            case 5:
+                wordMaxCount = 210;
+                break;
+            default:
+                wordMaxCount = 0;
+                break;
+        }
+
         // level과 wordCount를 맵에 담아서 반환
         Map<String, Object> response = new HashMap<>();
         response.put("level", userInfo.getLevelCategory().getLevel());
         response.put("wordCount", userInfo.getWordCount());
+        response.put("wordMaxCount", wordMaxCount);
 
         return ResponseEntity.ok(response);
     }
