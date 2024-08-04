@@ -12,8 +12,8 @@ import java.util.Date;
 public class KnowledgeDTO {
 
     private Long id;
-    private Date date;
+    private String date;
     private String title;
-    private String content;
+    //private String content;
 
 }

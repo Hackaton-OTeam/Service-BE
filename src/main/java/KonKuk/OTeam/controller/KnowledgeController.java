@@ -24,7 +24,7 @@ public class KnowledgeController {
      * 카테고리별 오늘의 공통 상식 제공
      * */
     @GetMapping("/today")
-    public Map<String, KnowledgeDTO> getTodayKnowledgeForAllCategories() {
+    public List<KnowledgeDTO> getTodayKnowledgeForAllCategories() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String todayStr = dateFormat.format(new Date());
         Date today = java.sql.Date.valueOf(todayStr); // String을 Date로 변환

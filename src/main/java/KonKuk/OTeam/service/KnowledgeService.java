@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,27 +21,23 @@ public class KnowledgeService {
     @Autowired
     private UserCategoryRepository userCategoryRepository;
 
-    public Map<String, KnowledgeDTO> getTodayKnowledgeForAllCategories(Date date) {
-        List<CategoryEntity> categories = categoryRepository.findAll();
-        Map<String, KnowledgeDTO> result = new HashMap<>();
+    public List<KnowledgeDTO> getTodayKnowledgeForAllCategories(Date date) {
+        // Set SimpleDateFormat to use UTC
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getDefault());
+        String formattedDate = dateFormat.format(date);
 
-        for (CategoryEntity category : categories) {
-            List<KnowledgeEntity> knowledges = knowledgeRepository.findByDateAndCategory(date, category);
-            if (!knowledges.isEmpty()) {
-                KnowledgeEntity knowledge = knowledges.get(0); // 카테고리별로 하나의 상식만 선택
-                KnowledgeDTO knowledgeDTO = new KnowledgeDTO(
+        List<KnowledgeEntity> knowledges = knowledgeRepository.findByDate(formattedDate);
+
+        System.out.println("Formatted Date: " + formattedDate);
+
+        return knowledges.stream()
+                .map(knowledge -> new KnowledgeDTO(
                         knowledge.getId(),
-                        knowledge.getDate(),
-                        knowledge.getTitle(),
-                        knowledge.getContent()
-                        //,categoryDTO
-                );
-                result.put(category.getCategory(), knowledgeDTO);
-            }
-        }
-
-        return result;
+                        formattedDate,
+                        knowledge.getTitle()
+                ))
+                .collect(Collectors.toList());
     }
 
 //    public Map<String, List<KnowledgeDTO>> getTodayKnowledgeForUser(String userEmail) {
