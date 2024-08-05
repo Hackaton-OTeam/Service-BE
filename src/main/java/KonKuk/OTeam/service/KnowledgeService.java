@@ -29,12 +29,14 @@ public class KnowledgeService {
 
         List<KnowledgeEntity> knowledges = knowledgeRepository.findByDate(formattedDate);
 
-        System.out.println("Formatted Date: " + formattedDate);
+        //System.out.println("Formatted Date: " + formattedDate);
+
+        String modifiedDate = formattedDate.replace("-", ".");
 
         return knowledges.stream()
                 .map(knowledge -> new KnowledgeDTO(
                         knowledge.getId(),
-                        formattedDate,
+                        modifiedDate,
                         knowledge.getTitle()
                 ))
                 .collect(Collectors.toList());
