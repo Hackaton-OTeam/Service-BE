@@ -254,13 +254,13 @@ public class QuizService {
 
     private LevelCategoryEntity determineLevelByWordCount(Long wordCount) {
         // 레벨 기준 정의
-        if (wordCount < 43) {
+        if (wordCount < 169) {
             return levelCategoryRepository.findByLevel("유생"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
-        } else if (wordCount < 85) {
+        } else if (wordCount < 337) {
             return levelCategoryRepository.findByLevel("문사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
-        } else if (wordCount < 127) {
+        } else if (wordCount < 505) {
             return levelCategoryRepository.findByLevel("학사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
-        } else if (wordCount < 1691) {
+        } else if (wordCount < 673) {
             return levelCategoryRepository.findByLevel("박사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
         } else {
             return levelCategoryRepository.findByLevel("세종대왕"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다

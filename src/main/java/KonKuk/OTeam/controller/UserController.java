@@ -135,19 +135,19 @@ public class UserController {
 
         switch (levelId.intValue()) {
             case 1:
-                wordMaxCount = 42;
-                break;
-            case 2:
-                wordMaxCount = 84;
-                break;
-            case 3:
-                wordMaxCount = 126;
-                break;
-            case 4:
                 wordMaxCount = 168;
                 break;
+            case 2:
+                wordMaxCount = 336;
+                break;
+            case 3:
+                wordMaxCount = 504;
+                break;
+            case 4:
+                wordMaxCount = 672;
+                break;
             case 5:
-                wordMaxCount = 210;
+                wordMaxCount = 840;
                 break;
             default:
                 wordMaxCount = 0;
