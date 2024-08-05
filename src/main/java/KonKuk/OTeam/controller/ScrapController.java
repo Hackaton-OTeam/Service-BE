@@ -17,6 +17,9 @@ public class ScrapController {
     @Autowired
     private ScrapService scrapService;
 
+    /**
+     * 단어 스크랩
+     * */
     @PostMapping("/word-save")
     public ResponseEntity<String> saveWordScrap(@RequestParam String userEmail, @RequestParam Long wordId) {
 
@@ -30,11 +33,17 @@ public class ScrapController {
         }
     }
 
+    /**
+     * 스크랩된 단어 확인
+     * */
     @GetMapping("/word-check")
     public List<WordDTO> getWordsByUserEmail(@RequestParam String userEmail) {
         return scrapService.getWordsByUserEmail(userEmail);
     }
 
+    /**
+     * 지식(어휘) 스크랩
+     * */
     @PostMapping("/knowledge-save")
     public ResponseEntity<String> saveKnowledgeScrap(@RequestParam String userEmail, @RequestParam Long knowledgeId) {
 
@@ -48,6 +57,9 @@ public class ScrapController {
         }
     }
 
+    /**
+     * 스크랩된 지식(어휘) 확인
+     * */
     @GetMapping("/knowledge-check")
     public List<KnowledgeDTO> getKnowledgesByUserEmail(@RequestParam String userEmail) {
         return scrapService.getKnowledgesByUserEmail(userEmail);

@@ -252,6 +252,9 @@ public class QuizService {
         }
     }
 
+    /**
+     * 학습 단어 수에 따른 레벨 기준
+     * */
     private LevelCategoryEntity determineLevelByWordCount(Long wordCount) {
         // 레벨 기준 정의
         if (wordCount < 43) {
@@ -260,7 +263,7 @@ public class QuizService {
             return levelCategoryRepository.findByLevel("문사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
         } else if (wordCount < 127) {
             return levelCategoryRepository.findByLevel("학사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
-        } else if (wordCount < 1691) {
+        } else if (wordCount < 169) {
             return levelCategoryRepository.findByLevel("박사"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
         } else {
             return levelCategoryRepository.findByLevel("세종대왕"); // levelCategoryRepository를 통해 LevelCategoryEntity를 가져온다
