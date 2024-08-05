@@ -16,6 +16,9 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * 전체 카테고리 종류 반환 (퀴즈용)
+     * */
     @GetMapping
     public List<CategoryDTO> getAllCategories() {
         return categoryService.getAllCategories();

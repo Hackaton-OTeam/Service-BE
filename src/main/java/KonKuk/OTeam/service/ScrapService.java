@@ -90,7 +90,7 @@ public class ScrapService {
     }
 
     public List<KnowledgeDTO> getKnowledgesByUserEmail(String email) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
         // 사용자의 WordScrapEntity를 조회
         List<KnowledgeScrapEntity> knowledgeScraps = knowledgeScrapRepository.findByUserInfo_Email(email);

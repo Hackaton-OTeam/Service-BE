@@ -30,6 +30,9 @@ public class QuizController {
         return quizService.getQuizChapterStatuses(categoryId, userEmail);
     }
 
+    /**
+     * 특정 카테고리에 대한 사용자의 학습 단어 수
+     * */
     @GetMapping("/words-count")
     public Map<String, Integer> getWordsSummary(
             @RequestParam Long categoryId,
@@ -97,6 +100,10 @@ public class QuizController {
         );
     }
 
+    /**
+     * (특정 카테고리) 특정 챕터의 단어 조회
+     * 스크랩 여부 반환하기 위해서 사용자 이메일도 필요
+     * */
     @GetMapping("/words")
     public List<WordDTO> getWordsByChapter(@RequestParam String userEmail,
                                            @RequestParam Long chapterId) {
