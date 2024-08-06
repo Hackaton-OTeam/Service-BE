@@ -10,4 +10,5 @@ public interface KnowledgeScrapRepository extends JpaRepository<KnowledgeScrapEn
 
     List<KnowledgeScrapEntity> findByUserInfo_Email(String email);
     Optional<KnowledgeScrapEntity> findByUserInfo_EmailAndKnowledge_Id(String email, Long knowledgeId);
+
 }

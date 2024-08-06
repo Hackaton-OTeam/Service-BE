@@ -69,6 +69,35 @@ public class ScrapService {
         knowledgeScrapRepository.save(knowledgeScrap);
     }
 
+    public void deleteWordScrap(String userEmail, Long wordId){
+        // 유저와 단어 정보 가져오기
+        UserInfoEntity userInfo = userInfoRepository.findById(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user email: " + userEmail));
+
+        WordEntity word = wordRepository.findById(wordId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid word ID: " + wordId));
+
+        WordScrapEntity wordScrapp = wordScrapRepository.findByUserInfo_EmailAndWord_Id(userEmail, wordId)
+                .orElseThrow(() -> new IllegalArgumentException("Knowledge scrap not found for user and knowledge"));
+
+        wordScrapRepository.delete(wordScrapp);
+    }
+
+    public void deleteKnowledgeScrap(String userEmail, Long knowledgeId){
+        // 유저와 단어 정보 가져오기
+        UserInfoEntity userInfo = userInfoRepository.findById(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user email: " + userEmail));
+
+        KnowledgeEntity knowledge = knowledgeRepository.findById(knowledgeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid knowledge ID: " + knowledgeId));
+
+        // KnowledgeScrapEntity 조회
+        KnowledgeScrapEntity knowledgeScrap = knowledgeScrapRepository.findByUserInfo_EmailAndKnowledge_Id(userEmail, knowledgeId)
+                .orElseThrow(() -> new IllegalArgumentException("Knowledge scrap not found for user and knowledge"));
+
+        knowledgeScrapRepository.delete(knowledgeScrap);
+    }
+
     public List<WordDTO> getWordsByUserEmail(String email) {
         // 사용자의 WordScrapEntity를 조회
         List<WordScrapEntity> wordScraps = wordScrapRepository.findByUserInfo_Email(email);

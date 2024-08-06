@@ -34,6 +34,22 @@ public class ScrapController {
     }
 
     /**
+     * 단어 스크랩 삭제
+     * */
+    @PostMapping("/word-delete")
+    public ResponseEntity<String> deleteWordScrap(@RequestParam String userEmail, @RequestParam Long knowledgeId) {
+
+        try {
+            scrapService.deleteWordScrap(userEmail, knowledgeId);
+            return ResponseEntity.ok("단어 스크랩 취소 완료");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
+    /**
      * 스크랩된 단어 확인
      * */
     @GetMapping("/word-check")
@@ -50,6 +66,21 @@ public class ScrapController {
         try {
             scrapService.saveKnowledgeScrap(userEmail, knowledgeId);
             return ResponseEntity.ok("어휘 스크랩 완료");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+    /**
+     * 지식(어휘) 스크랩 삭제
+     * */
+    @PostMapping("/knowledge-delete")
+    public ResponseEntity<String> deleteKnowledgeScrap(@RequestParam String userEmail, @RequestParam Long knowledgeId) {
+
+        try {
+            scrapService.deleteKnowledgeScrap(userEmail, knowledgeId);
+            return ResponseEntity.ok("어휘 스크랩 취소 완료");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IllegalStateException e) {
