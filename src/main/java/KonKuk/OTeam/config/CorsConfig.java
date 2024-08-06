@@ -14,11 +14,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173",
-                                "http://ec2-13-209-12-231.ap-northeast-2.compute.amazonaws.com:8080",
+                        .allowedOrigins(
                                 "https://eohwirikrik.web.app",
                                 "https://eohwirikserver.duckdns.org"
-                        ) // 클라이언트의 URL
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -26,3 +25,4 @@ public class CorsConfig {
         };
     }
 }
+
